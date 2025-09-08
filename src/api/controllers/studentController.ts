@@ -21,7 +21,6 @@ const studentListGet = async (
     const students = await getAllStudents();
     res.json(students);
   } catch (error) {
-    console.error('studentListGet error:', error);
     next(error);
   }
 };
@@ -45,7 +44,6 @@ const studentGet = async (
     const student = await getStudent(req.params.id);
     res.json(student);
   } catch (error) {
-    console.error('studentGet error:', error);
     next(error);
   }
 };
@@ -81,7 +79,6 @@ const studentPost = async (
     };
     res.json(message);
   } catch (error) {
-    console.error('studentPost error:', error);
     next(error);
   }
 };
@@ -113,7 +110,6 @@ const studentPut = async (
       res.json(message);
     }
   } catch (error) {
-    console.error('studentPut error:', error);
     next(error);
   }
 };
@@ -154,7 +150,6 @@ const studentDelete = async (
       res.json(message);
     }
   } catch (error) {
-    console.error('studentDelete error:', error);
     next(error);
   }
 };
