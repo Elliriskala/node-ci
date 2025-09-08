@@ -1,10 +1,7 @@
--- source C:/Users/ellir/tietoliikenne-S2025/node-ci/db/create-db.sql;
-
 DROP DATABASE IF EXISTS cicdtest;
 CREATE DATABASE cicdtest;
-
-CREATE USER IF NOT EXISTS 'myusername'@'%' IDENTIFIED BY 'mypassword';
-GRANT ALL PRIVILEGES ON cicdtest.* TO 'myusername'@'%';
+CREATE USER 'myusername'@'localhost' IDENTIFIED BY 'mypassword';
+GRANT ALL PRIVILEGES ON `cicdtest`.* TO 'myusername'@'localhost';
 FLUSH PRIVILEGES;
 
 USE cicdtest;
