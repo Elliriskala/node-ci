@@ -5,33 +5,36 @@ name: Node.js CI
 
 on:
   push:
-    branches: ['main']
+    branches: [ "main" ]
   pull_request:
-    branches: ['main']
+    branches: [ "main" ]
 
 jobs:
   build:
+    # setting environment variables, if needed
+    env:
+      NODE_ENV: development
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [22.x, 24.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup MySql
-        run: |
-          sudo systemctl start mysql
-          cp .env.sample .env
-          mysql -u root -proot < db/create-db.sql
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm run test
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Setup Mysql
+      run: |
+        sudo systemctl start mysql
+        cp .env.sample .env
+        mysql -u root -proot < db/create-db.sql 
+    - name: Use Node.js ${{ matrix.node-version }} in ${{env.NODE_ENV}} mode
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: ls
+    - run: npm run build --if-present
+    - run: npm run test
