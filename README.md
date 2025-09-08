@@ -371,4 +371,4 @@ Testing successful API responses and error handling. The test cases for both sce
                pm2 restart node-ci-example
    ```
 
-1. Test by committing the changes and pushing them to the remote repository, check the status of the action in GitHub
+1. Test by committing the changes and pushing them to the remote repository, check the status of the action in GitHub.
