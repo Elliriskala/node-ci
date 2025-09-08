@@ -2,9 +2,6 @@
 
 DROP DATABASE IF EXISTS cicdtest;
 CREATE DATABASE cicdtest;
-CREATE USER IF NOT EXISTS 'root'@'localhost' IDENTIFIED BY 'elli123';
-GRANT ALL PRIVILEGES ON `cicdtest`.* TO 'root'@'localhost';
-FLUSH PRIVILEGES;
 
 USE cicdtest;
 
