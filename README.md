@@ -210,6 +210,7 @@ jobs:
 {"message": "routes: students"}
 ```
 
+## Successful git push of the CD pipeline
 <img width="1518" height="886" alt="image" src="https://github.com/user-attachments/assets/93c760a0-6f14-4134-bcd3-3bfc054c8035" />
 
 
