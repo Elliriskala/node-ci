@@ -1,4 +1,4 @@
--- source C:/Users/ellir/tietoliikenne-S2025/node-ci/node-ci-intro/db/create-db.sql;
+-- source C:/Users/ellir/tietoliikenne-S2025/node-ci/db/create-db.sql;
 
 DROP DATABASE IF EXISTS cicdtest;
 CREATE DATABASE cicdtest;
