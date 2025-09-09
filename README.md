@@ -4,7 +4,7 @@
 
 - Access the server via SSH (PuTTY used for this)
 
-- Always start by updating the system
+- Remember to always start by updating the system
 
 ```bash
   sudo apt update
@@ -27,7 +27,11 @@
   cd node-ci
 ```
 
-- Set up the DB by login into MariaDB and run:
+- Set up the DB by login into MariaDB and run
+
+``` bash
+  sudo mysql -u root -p
+```
 
 ```sql
   CREATE DATABASE cicdtest;
@@ -54,40 +58,19 @@
   PORT=3000
 ```
 
-- Install Node modules
+- Install Node modules and build the app
 
 ```bash
   npm install
+  npm run build
 ```
 
-2. Setup pm2 to keep the application running
-
-- Start the app using pm2
-
-```bash
-  pm2 start dist/src/index.js --name cicd-deploy
-  pm2 save
-```
-
-- Setup pm2 to restart on server reboot
-
-```bash
-  sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u ellinor --hp /home/ellinor
-  pm2 save
-```
-
-- Verify pm2 list:
-
-```bash
-  pm2 list
-```
-
-3. Configure Apache reverse proxy (HTTP & HTTPS)
+2. Configure Apache reverse proxy (HTTP & HTTPS)
 
 - Enable necessary modules
 
 ```bash
-  sudo a2enmod proxy proxy_http headers rewrite
+  sudo a2enmod proxy proxy_http headers
   sudo systemctl restart apache2
 ```
 
@@ -112,13 +95,12 @@
   </VirtualHost>
 ```
 
-- Restart Apache
-
-```bash
-  sudo systemctl restart apache2
+- Restart Apache to aply changes
+``` bash
+  sudo systemctl reload apache2
 ```
 
-4. Enable HTTPS with Certbot (it will automatically configure \*:443)
+3. Enable HTTPS with Certbot (it will automatically configure \*:443)
 
 ```bash
 sudo apt install certbot python3-certbot-apache -y
@@ -127,6 +109,30 @@ sudo certbot --apache
 
 - Follow prompts and select correct domain
 - Verify HTTPS: https://ucad-server-https.northeurope.cloudapp.azure.com
+
+4. Setup pm2 to keep the application running
+
+- Start the app using pm2
+
+```bash
+  pm2 start dist/src/index.js --name cicd-deploy
+  pm2 save
+```
+
+- Setup pm2 to restart on server reboot
+
+```bash
+  sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u <USERNAME> --hp /home/<USERNAME>
+  pm2 save
+```
+
+- Verify pm2 list:
+
+```bash
+  pm2 list
+```
+
+- The app must be started manually with pm2 once before GitHub Actions can restart it.
 
 5. Setup SSH keys for GitHub actions
 
@@ -146,13 +152,12 @@ sudo certbot --apache
   cat ~/.ssh/id_rsa-github-node.pub >> ~/.ssh/authorized_keys
 ```
 
-- Add the private key to GitHub
-  In the project repository go to Settings → Secrets → Actions → New repository secret and add:
+6. Create GitHub Actions workflow
+- Add the private key and other secrets to GitHub
+  In the project repository go to Settings -> Secrets -> Actions -> New repository secret and add:
 
   - Name: PRIVATE_KEY
   - Value: paste the private key ~/.ssh/id_rsa-github-node
-
-- Add other secrets
 
   - Name: HOST
   - Value: the server IP or domain
@@ -160,7 +165,7 @@ sudo certbot --apache
   - Name: USERNAME
   - Value: server username
 
-6. Create GitHub Actions Workflow (.github/workflows/deploy.yml)
+- Create .github/workflows/deploy.yml
 
 ```yaml
 name: Node.js CD
@@ -193,6 +198,7 @@ jobs:
 
 7. Test the deployment pipeline
 
+- Make sure the server is running
 - Add, commit and push changes to main
 - Check GitHub actions → workflow logs
 - Verify server app is running
