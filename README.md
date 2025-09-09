@@ -198,7 +198,7 @@ jobs:
 
 7. Test the deployment pipeline
 
-- Make sure the server is running
+- Make sure the server is running...
 - Add, commit and push changes to main
 - Check GitHub actions → workflow logs
 - Verify server app is running
