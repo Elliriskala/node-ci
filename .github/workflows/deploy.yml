@@ -19,7 +19,7 @@ jobs:
           script: |
             cd ~/node-ci
             git pull origin main
-            npm install --legacy-peer-deps
+            npm install
             npm run build
             npm run test
             npm run apidoc
